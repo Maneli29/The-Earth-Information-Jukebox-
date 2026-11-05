@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Downloaded data (large files)
+data/*
+!data/README.md
+*.mp4
+*.mov
+*.wav
