@@ -10,7 +10,7 @@ Servo needle;
 // true  = turning the knob moves the servo and LEDs and shows the level on
 //         the screen by itself (standalone hardware test)
 // false = only commands from the laptop (Python) drive the outputs
-const bool KNOB_DRIVES_OUTPUTS = true;
+const bool KNOB_DRIVES_OUTPUTS = false;
 
 const int POT_PIN = A0;
 const int SERVO_PIN = 9;
@@ -48,6 +48,9 @@ void drawScreen() {
 void handleLine(char *s) {
   if (strncmp(s, "LEVEL,", 6) == 0) {
     setLevel(atoi(s + 6));
+  } else if (strncmp(s, "LEDS,", 5) == 0) {
+    int mask = atoi(s + 5);
+    for (int i = 0; i < 5; i++) digitalWrite(LED_PINS[i], ((mask >> i) & 1) ? HIGH : LOW);
   } else if (strncmp(s, "FREQ,", 5) == 0) {
     int f = atoi(s + 5);
     if (f > 0) tone(BUZZER_PIN, f); else noTone(BUZZER_PIN);

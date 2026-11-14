@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earth Jukebox: hear the oceans and the air</title>
+<style>
+  :root { --bg:#0b1020; --fg:#f5f7ff; --accent:#ffd166; --panel:#161d36; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg);
+         color:var(--fg); line-height:1.6; font-size:1.125rem; }
+  .skip { position:absolute; left:-999px; top:0; background:var(--accent);
+          color:#000; padding:.75rem 1rem; z-index:10; }
+  .skip:focus { left:0; }
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden;
+             clip:rect(0 0 0 0); white-space:nowrap; }
+  header, main, footer { max-width:60rem; margin:0 auto; padding:1rem; }
+  h1 { font-size:2rem; margin:.5rem 0; }
+  h2 { font-size:1.4rem; margin-top:2rem; }
+  video { width:100%; max-height:60vh; background:#000; border-radius:.5rem; }
+  fieldset { border:3px solid var(--accent); border-radius:.6rem; padding:.75rem 1rem; margin:1rem 0; }
+  legend { font-weight:700; padding:0 .5rem; }
+  fieldset label { display:block; padding:.4rem 0; cursor:pointer; }
+  input[type=radio], input[type=checkbox] { width:1.3rem; height:1.3rem; margin-right:.5rem; }
+  .controls { display:flex; flex-wrap:wrap; gap:.75rem; margin:1rem 0; }
+  button { font:inherit; font-size:1.25rem; padding:.9rem 1.4rem; min-width:7rem;
+           border-radius:.6rem; border:3px solid var(--accent);
+           background:var(--panel); color:var(--fg); cursor:pointer; }
+  button:hover { background:#232d52; }
+  :focus-visible { outline:4px solid #fff; outline-offset:3px; }
+  .panel { background:var(--panel); border-radius:.6rem; padding:1rem 1.25rem; margin:1rem 0; }
+  #position { font-size:1.3rem; font-weight:600; color:var(--accent); }
+  [hidden] { display:none !important; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<a class="skip" href="#player">Skip to the player</a>
+
+<header>
+  <h1>Earth Jukebox: hear the oceans and the air</h1>
+  <p>NASA Earth visualizations turned into sound, so you can explore them by
+  listening. Made for NASA Space Apps 2026 (challenge: The Earth Information Jukebox).</p>
+</header>
+
+<main id="main">
+  <section aria-labelledby="player-h">
+    <h2 id="player-h">Play a track</h2>
+
+    <fieldset>
+      <legend>Choose a track</legend>
+      <label><input type="radio" name="track" value="sst" checked>
+        Sea surface temperature: the warmth of the world's oceans</label>
+      <label><input type="radio" name="track" value="aq">
+        Air quality: carbon monoxide, fine particles and nitrous oxides</label>
+    </fieldset>
+
+    <video id="player" controls playsinline preload="metadata"
+           aria-label="Sea surface temperature map with a white line sweeping from west to east, with matching sound"
+           src="sst_jukebox.mp4"></video>
+
+    <div class="controls" role="group" aria-label="Playback controls">
+      <button id="playpause" type="button">Play</button>
+      <button id="back" type="button" aria-label="Back 5 seconds">Back 5 s</button>
+      <button id="fwd" type="button" aria-label="Forward 5 seconds">Forward 5 s</button>
+      <button id="restart" type="button">Restart</button>
+    </div>
+
+    <p id="position" aria-live="off">Ready. Press play to start the sweep.</p>
+    <p><label><input type="checkbox" id="announce">
+      Announce the place being played with my screen reader</label></p>
+    <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="panel" id="desc-sst" aria-labelledby="hear-sst-h">
+    <h2 id="hear-sst-h">What you are hearing: sea surface temperature</h2>
+    <ul>
+      <li><strong>Time is west to east.</strong> The track sweeps once around the
+      map in about 32 seconds, starting at the International Date Line in the Pacific.
+      Sound moves from the left speaker (west) to the right speaker (east).</li>
+      <li><strong>Pitch is temperature.</strong> Low notes are cold water near 0 °C;
+      high notes are warm water up to 32 °C. The tone also gets brighter as the water
+      gets warmer. Notes snap to a five-note musical scale.</li>
+      <li><strong>Five quick notes at each step</strong> are five bands of latitude, played
+      from north to south.</li>
+      <li><strong>Silence is land or ice.</strong> You can hear the continents as gaps.</li>
+    </ul>
+    <p><strong>About the data:</strong> the sound is built from one frame of a NASA
+    visualization of sea surface currents, coloured by temperature. Temperatures are
+    read back from the colours using the visualization's own colour legend (0 to 32 °C),
+    so they are approximate averages, not exact measurements. It is a snapshot, not a
+    record of change over time.</p>
+  </section>
+
+  <section class="panel" id="desc-aq" aria-labelledby="hear-aq-h" hidden>
+    <h2 id="hear-aq-h">What you are hearing: air quality</h2>
+    <ul>
+      <li><strong>The picture is a globe centred on the Indian Ocean,</strong> split into
+      three vertical sections, each showing a different pollutant from a computer model.
+      The sweep goes from the left edge of the globe to the right edge in about 32 seconds.</li>
+      <li><strong>Each pollutant has its own sound.</strong> Carbon monoxide is a short,
+      warm pluck. Fine particles (PM2.5) are a soft, sustained pad. Nitrous oxides are
+      bell tones.</li>
+      <li><strong>Higher and louder means stronger colour,</strong> which means more of
+      that pollutant in that area. Five quick notes at each step are five bands of latitude,
+      north to south.</li>
+      <li><strong>Silence</strong> is the empty space outside the globe's curved edge.</li>
+    </ul>
+    <p><strong>About the data, and its limits:</strong> this frame has no colour legend,
+    so the sound shows relative strength within each pollutant, not real concentrations.
+    You cannot compare the loudness of one pollutant with another. The track is built
+    from a single frame, so it is a snapshot in time.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="hw-h">
+    <h2 id="hw-h">Optional touch interface</h2>
+    <p>A small Arduino device can show the same data by touch and light: a servo needle
+    that rises with temperature, and five lights for the five latitude bands.</p>
+  </section>
+</main>
+
+<footer>
+  <h2>Credits</h2>
+  <p>Sea surface visualization: Global Sea Surface Currents and Temperature:
+Page Link: https://svs.gsfc.nasa.gov/3912/#media_group_349716
+Credits: NASA/Goddard Space Flight Center Scientific Visualization Studio
+
+Animators
+Greg Shirah (NASA/GSFC) ORCID logo. It consists of the text 'id' in lowercase inside of a green circle.
+Horace Mitchell (NASA/GSFC)
+Eric Sokolowsky (Global Science and Technology, Inc.)
+Project support
+Eric Sokolowsky (Global Science and Technology, Inc.)
+Producer
+Michael Starobin (HTSI)
+Scientists
+Hong Zhang (UCLA)
+Dimitris Menemenlis (NASA/JPL CalTech).</p>
+  <p>Air quality visualization: Air Quality Model Runs:
+Page Link: https://svs.gsfc.nasa.gov/5533/
+Credits: NASA's Scientific Visualization Studio and NASA's Global Modeling and Assimilation Office
+
+Data visualizers
+Helen-Nicole Kostis (USRA) ORCID logo. It consists of the text 'id' in lowercase inside of a green circle.
+Joseph V. Ardizzone (NASA/GSFC) ORCID logo. It consists of the text 'id' in lowercase inside of a green circle.
+Scientist
+Lesley Ott (NASA/GSFC) ORCID logo. It consists of the text 'id' in lowercase inside of a green circle.
+Technical support
+Laurence Schuler (ADNET Systems, Inc.)
+Ian Jones (ADNET Systems, Inc.)
+Ella Kaplan (Global Science and Technology, Inc.).</p>
+  <p>AI use:  Initial Draft of this webpage was done by Claude.</p>
+</footer>
+
+<script>
+  // Approximate places along each sweep, in seconds. Listen and adjust these numbers.
+  const TRACKS = {
+    sst: {
+      video: 'sst_jukebox.mp4',
+      label: 'Sea surface temperature map with a white line sweeping from west to east, with matching sound',
+      name: 'Sea surface temperature',
+      segments: [
+        { from: 0,  to: 7,  text: 'Pacific Ocean, from the International Date Line eastward' },
+        { from: 7,  to: 13, text: 'Central and South America, sound thins over land' },
+        { from: 13, to: 15, text: 'Atlantic Ocean' },
+        { from: 15, to: 20, text: 'Africa, mostly silence over land' },
+        { from: 20, to: 26, text: 'Indian Ocean, the warmest water' },
+        { from: 26, to: 30, text: 'Australia and Southeast Asia' },
+        { from: 30, to: 40, text: 'Western Pacific, back where the sweep began' }
+      ]
+    },
+    aq: {
+      video: 'aq_jukebox.mp4',
+      label: 'Globe showing air pollution in three sections, with a white line sweeping from left to right, with matching sound',
+      name: 'Air quality',
+      segments: [
+        { from: 0,  to: 11, text: 'Carbon monoxide: plucks over Africa and the Arabian Peninsula, strongest along East Africa' },
+        { from: 11, to: 24, text: 'Fine particles (PM2.5): soft pad over the Arabian Sea, India and the Himalayan region' },
+        { from: 24, to: 34, text: 'Nitrous oxides: bells over Southeast Asia, eastern China and the western Pacific' }
+      ]
+    }
+  };
+
+  const v = document.getElementById('player');
+  const pos = document.getElementById('position');
+  const pp = document.getElementById('playpause');
+  const status = document.getElementById('status');
+  let current = 'sst';
+  let last = '';
+
+  function placeAt(t) {
+    for (const s of TRACKS[current].segments) if (t >= s.from && t < s.to) return s.text;
+    return 'End of the sweep';
+  }
+
+  function selectTrack(id) {
+    current = id;
+    v.pause();
+    v.src = TRACKS[id].video;
+    v.setAttribute('aria-label', TRACKS[id].label);
+    v.load();
+    last = '';
+    pos.textContent = 'Ready. Press play to start the sweep.';
+    document.getElementById('desc-sst').hidden = (id !== 'sst');
+    document.getElementById('desc-aq').hidden = (id !== 'aq');
+    status.textContent = 'Track changed to ' + TRACKS[id].name + '. Press play to listen.';
+  }
+
+  document.querySelectorAll('input[name=track]').forEach((r) => {
+    r.addEventListener('change', (e) => { if (e.target.checked) selectTrack(e.target.value); });
+  });
+
+  v.addEventListener('timeupdate', () => {
+    const txt = placeAt(v.currentTime);
+    if (txt !== last) {
+      last = txt;
+      pos.textContent = Math.floor(v.currentTime) + ' seconds: ' + txt;
+    }
+  });
+  v.addEventListener('play',  () => { pp.textContent = 'Pause'; });
+  v.addEventListener('pause', () => { pp.textContent = 'Play'; });
+  v.addEventListener('ended', () => {
+    pos.textContent = 'Finished. Press Restart to hear it again.';
+    last = '';
+  });
+
+  pp.addEventListener('click', () => { if (v.paused) v.play(); else v.pause(); });
+  document.getElementById('back').addEventListener('click', () => {
+    v.currentTime = Math.max(0, v.currentTime - 5);
+  });
+  document.getElementById('fwd').addEventListener('click', () => {
+    v.currentTime = Math.min(v.duration || 0, v.currentTime + 5);
+  });
+  document.getElementById('restart').addEventListener('click', () => {
+    v.currentTime = 0; v.play();
+  });
+  document.getElementById('announce').addEventListener('change', (e) => {
+    pos.setAttribute('aria-live', e.target.checked ? 'polite' : 'off');
+  });
+</script>
+</body>
+</html>
