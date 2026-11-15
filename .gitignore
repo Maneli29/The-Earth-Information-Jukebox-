@@ -225,3 +225,5 @@ data/*
 *.mp4
 *.mov
 *.wav
+!web/
+!web/*.mp4

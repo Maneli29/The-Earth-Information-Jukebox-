@@ -10,7 +10,7 @@ Servo needle;
 // true  = turning the knob moves the servo and LEDs and shows the level on
 //         the screen by itself (standalone hardware test)
 // false = only commands from the laptop (Python) drive the outputs
-const bool KNOB_DRIVES_OUTPUTS = false;
+const bool KNOB_DRIVES_OUTPUTS = true;
 
 const int POT_PIN = A0;
 const int SERVO_PIN = 9;
